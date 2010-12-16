@@ -1,6 +1,6 @@
 classdef Word < handle
     properties
-        N     =  6; % number of states
+        N     =  3; % number of states
         A     = []; % NxN transition probability matrix
         prior = []; % Nx1 initial state distribution vector
         mu    = []; % DxN mean vector (D = number of features)
@@ -65,14 +65,13 @@ classdef Word < handle
             end
         end
         
-        function initialize(self, observations)
+        function em_initialize(self, observations)
             % Random guessing
             self.prior = normalise(rand(self.N, 1));
             self.A     = mk_stochastic(rand(self.N));
             
-            % All states start out with the same covariance
-            C = cov(observations');
-            self.Sigma = repmat(0.5 * diag(diag(C)), [1 1 self.N]);
+            % All states start out with the empirical diagonal covariance
+            self.Sigma = repmat(diag(diag(cov(observations'))), [1 1 self.N]);
             
             % Initialize each mean to a random data point
             indices = randperm(size(observations, 2));
@@ -80,9 +79,9 @@ classdef Word < handle
         end
         
         function train(self, observations)
-            self.initialize(observations);
+            self.em_initialize(observations);
 
-            for i = 1:10
+            for i = 1:15
                 log_likelihood = self.em_step(observations);
                 display(sprintf('Step %02d: log_likelihood = %f', i, log_likelihood))
                 self.plot_gaussians(observations);

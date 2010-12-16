@@ -2,7 +2,7 @@ function framefrequencies = extract_features(sound)
     Fs = 8000;
     framesize = 80;
     overlap = 20;
-    D = 4; % Number of frequencies stored from each signal frame
+    D = 6; % Number of frequencies stored from each signal frame
 
     frames = buffer(sound, framesize, overlap);
     w = hamming(framesize);
