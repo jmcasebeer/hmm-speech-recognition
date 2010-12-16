@@ -48,7 +48,7 @@ classdef Word < handle
             
             for t = (T - 1):-1:1
                 % Induction
-                beta(:, t) = self.A * (beta(:, t + 1) .* B(:, t + 1));
+                beta(:, t) = self.A * (B(:, t + 1) .* beta(:, t + 1));
                 
                 % Scaling
                 beta(:, t) = beta(:, t) ./ sum(beta(:, t));
@@ -115,15 +115,16 @@ classdef Word < handle
             
             gamma_state_sum = sum(gamma, 2);
             
-            % Set any zeroes to one before dividing to avoid NaN
+            % Set any zeroes to one before dividing.
+            % This forces the mean and covariance of states with probability
+            % 0 to become 0 instead of NaN.
             gamma_state_sum = gamma_state_sum + (gamma_state_sum == 0);
             
             for s = 1:self.N
                 gamma_observations = observations .* repmat(gamma(s, :), [D 1]);
                 expected_mu(:, s)  = sum(gamma_observations, 2) / gamma_state_sum(s);
                 
-                % Using Sigma = E(X * X') - mu * mu'
-                % Also make sure it's symmetric
+                % Make sure it's symmetric
                 expected_Sigma(:, :, s) = symmetrize(gamma_observations * observations' / gamma_state_sum(s) - ...
                                                      expected_mu(:, s) * expected_mu(:, s)');
             end
