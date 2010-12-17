@@ -17,7 +17,7 @@ classdef Vocabulary < handle
             
             for word = fieldnames(self.words)'
                 likelihood = self.words.(char(word)).log_likelihood(extract_features(cell2mat(audio_signal)));
-                likelihoods = [likelihoods likelihood]; %#ok<AGROW>
+                likelihoods(end + 1) = likelihood; %#ok<AGROW>
                 
                 if likelihood > max_likelihood
                     max_likelihood = likelihood;
