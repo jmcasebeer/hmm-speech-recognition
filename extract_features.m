@@ -9,10 +9,9 @@ function features = extract_features(sound)
     [~, N] = size(frames);
     features = zeros(D, N);
 
-    i = 1;
     NFFT = 2^nextpow2(framesize);
-    for frame = frames
-        X = fft(frame .* window, NFFT)/framesize;
+    for i = 1:size(frames, 2)
+        X = fft(frames(:, i) .* window, NFFT)/framesize;
         F = Fs/2*linspace(0, 1, NFFT/2 + 1);
         
         % Finding local maxima in single-sided amplitude spectrum
@@ -25,6 +24,5 @@ function features = extract_features(sound)
         end
 
         features(:, i) = F(peaks(1:D))';
-        i = i + 1;
     end
 end
