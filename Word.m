@@ -21,7 +21,7 @@ classdef Word < handle
         function [log_likelihood, alpha] = forward(self, B)
             log_likelihood = 0;
             T = size(B, 2);
-            alpha = zeros(self.N, T);
+            alpha = zeros(size(B));
             
             for t = 1:T
                 if t == 1
@@ -41,7 +41,7 @@ classdef Word < handle
         
         function beta = backward(self, B)
             T = size(B, 2);
-            beta = zeros(self.N, T);
+            beta = zeros(size(B));
             
             % Initialization
             beta(:, T) = ones(self.N, 1);
