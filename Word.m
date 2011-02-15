@@ -15,12 +15,12 @@ classdef Word < handle
         
         function log_likelihood = log_likelihood(self, observations)
             B = self.state_likelihood(observations);
-            log_likelihood = forward(self, observations, B);
+            log_likelihood = forward(self, B);
         end
         
-        function [log_likelihood, alpha] = forward(self, observations, B)
+        function [log_likelihood, alpha] = forward(self, B)
             log_likelihood = 0;
-            T = size(observations, 2);
+            T = size(B, 2);
             alpha = zeros(self.N, T);
             
             for t = 1:T
@@ -39,8 +39,8 @@ classdef Word < handle
             end
         end
         
-        function beta = backward(self, observations, B)
-            T = size(observations, 2);
+        function beta = backward(self, B)
+            T = size(B, 2);
             beta = zeros(self.N, T);
             
             % Initialization
@@ -93,8 +93,8 @@ classdef Word < handle
             D = size(observations, 1);
             T = size(observations, 2);
             
-            [log_likelihood, alpha] = self.forward(observations, B);
-            beta                    = self.backward(observations, B);
+            [log_likelihood, alpha] = self.forward(B);
+            beta                    = self.backward(B);
             
             xi_sum = zeros(self.N, self.N);
             gamma  = zeros(self.N, T);
