@@ -61,7 +61,7 @@ classdef Word < handle
             B = zeros(self.N, size(observations, 2));
             
             for s = 1:self.N                
-                B(s, :) = mvnpdf(observations', self.mu(:, s)', self.Sigma(:, :, s));
+                B(s, :) = mvnpdf(observations', self.mu(:, s)', self.Sigma(:, :, s)');
             end
         end
         
