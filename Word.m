@@ -44,7 +44,7 @@ classdef Word < handle
             beta = zeros(size(B));
             
             % Initialization
-            beta(:, T) = ones(self.N, 1);
+            beta(:, T) = ones(size(B, 1), 1);
             
             for t = (T - 1):-1:1
                 % Induction
